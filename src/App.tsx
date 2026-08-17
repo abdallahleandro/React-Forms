@@ -2,10 +2,22 @@ import "./App.css";
 
 import { Controller, useForm } from "react-hook-form";
 
-export default function App() {
-  const { control, handleSubmit } = useForm();
+type FormData = {
+  name: string;
+  date: string;
+  subject: string;
+};
 
-  function onSubmit(data) {
+export default function App() {
+  const { control, handleSubmit } = useForm<FormData>({
+    defaultValues: {
+      name: "",
+      date: "",
+      subject: "",
+    },
+  });
+
+  function onSubmit(data: FormData) {
     console.log(data);
   }
 
@@ -26,18 +38,30 @@ export default function App() {
 
         <span className="error">Nome é obrigatório</span>
 
-        <input type="date" placeholder="Nome do evento" lang="pt-BR" />
+        <Controller
+          control={control}
+          name="date"
+          render={({ field }) => (
+            <input type="date" placeholder="Nome do evento" {...field} />
+          )}
+        />
 
-        <select defaultValue="">
-          <option value="" disabled>
-            Selecione...
-          </option>
+        <Controller
+          control={control}
+          name="subject"
+          render={({ field }) => (
+            <select {...field}>
+              <option value="" disabled>
+                Selecione...
+              </option>
 
-          <option value="technology">React</option>
-          <option value="entertainment">Node.js</option>
-          <option value="business">Javascript</option>
-          <option value="business">Typescript</option>
-        </select>
+              <option value="react">React</option>
+              <option value="nodejs">Node.js</option>
+              <option value="jvascript">Javascript</option>
+              <option value="typescript">Typescript</option>
+            </select>
+          )}
+        />
 
         <textarea placeholder="Descrição" rows={4} />
 
